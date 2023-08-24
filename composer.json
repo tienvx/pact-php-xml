@@ -1,5 +1,6 @@
 {
     "name": "tienvx/pact-php-xml",
+    "description": "Add XML Support For Pact PHP",
     "type": "library",
     "license": "MIT",
     "autoload": {

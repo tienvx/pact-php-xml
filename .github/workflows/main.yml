@@ -3,8 +3,35 @@ name: main
 on: [push, pull_request]
 
 jobs:
-  run:
+
+  php-cs:
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout repository
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: phpstan, php-cs-fixer:3
+
+      - name: Install
+        uses: "ramsey/composer-install@v2"
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.COMPOSER_AUTH }}"}}'
+
+      - name: Run PHP CS Fixer
+        run: php-cs-fixer fix --diff --dry-run
+
+      - name: Run PHPStan
+        run: phpstan
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - php-cs
     strategy:
       matrix:
         php-versions: ['8.0', '8.1', '8.2']
@@ -27,12 +54,6 @@ jobs:
         dependency-versions: ${{ matrix.dependency-versions }}
       env:
         COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.COMPOSER_AUTH }}"}}'
-
-    - name: Run PHP CS Fixer
-      run: php-cs-fixer fix --diff --dry-run
-
-    - name: Run PHPStan
-      run: phpstan
 
     - name: Test
       run: ./vendor/bin/phpunit
