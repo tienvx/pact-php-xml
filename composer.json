@@ -1,0 +1,29 @@
+{
+    "name": "tienvx/pact-php-xml",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Tienvx\\PactPhpXml\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tienvx\\PactPhpXml\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tienvx",
+            "email": "tien.xuan.vo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "aaronddm/xml-builder": "^2.0",
+        "pact-foundation/pact-php": "10.0.0-alpha2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}
