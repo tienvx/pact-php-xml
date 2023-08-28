@@ -7,8 +7,9 @@ use Tienvx\PactPhpXml\XmlElementData;
 
 class XmlElementDataTest extends TestCase
 {
-    public function testGetMatchingArray()
+    public function testGetMatchingArray(): void
     {
+        /** @var XmlElementData */
         $element = XmlElementData::create('Child', 'test', ['myAttr' => 'attr-value']);
         $element->setMatching(true);
         $element->setOptions(['elements' => 7]);
@@ -28,7 +29,7 @@ class XmlElementDataTest extends TestCase
         JSON, json_encode($element->getArray(), JSON_PRETTY_PRINT));
     }
 
-    public function testGetCustomArray()
+    public function testGetCustomArray(): void
     {
         $element = XmlElementData::create('Child', 'test', ['myAttr' => 'attr-value']);
 

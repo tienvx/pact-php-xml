@@ -4,21 +4,28 @@ namespace Tienvx\PactPhpXml;
 
 class XmlBuilder
 {
-    private XMLArray $xmlArray;
+    private XmlArray $xmlArray;
 
     public function __construct(
         private string $version,
         private string $charset,
-        ?XMLArray $xmlArray = null
+        ?XmlArray $xmlArray = null
     ) {
-        $this->xmlArray = $xmlArray ?? XmlArray::initiate(XmlElementData::class);
+        $this->xmlArray = $xmlArray ?? XmlArray::initiate(XmlElementData::class); // @phpstan-ignore-line
     }
 
-    public function start(string $rootName, array $attributes = []): XMLArray
+    /**
+     * @param array<string, string> $attributes
+     */
+    public function start(string $rootName, array $attributes = []): XmlArray
     {
+        /** @var XmlArray */
         return $this->xmlArray->start($rootName, $attributes);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getArray(): array
     {
         return [

@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=8.0",
-        "aaronddm/xml-builder": "^2.0",
+        "aaronddm/xml-builder": "^2.0.3",
         "pact-foundation/pact-php": "10.0.0-alpha2"
     },
     "require-dev": {

@@ -9,9 +9,10 @@ use Tienvx\PactPhpXml\XmlElementData;
 
 class XmlArrayTest extends TestCase
 {
-    public function testEachLike()
+    public function testEachLike(): void
     {
         $options = ['elements' => 5];
+        /** @var XmlArray */
         $parent = XmlArray::initiate(XmlElementData::class);
         $child = $parent->eachLike('Child', ['myAttr' => 'attr-value'], $options);
         $stack = $this->getProperty($parent, 'stack');
@@ -26,6 +27,7 @@ class XmlArrayTest extends TestCase
     private function getProperty(object $object, string $property): mixed
     {
         $reflection = new ReflectionProperty($object, $property);
+        $reflection->setAccessible(true);
 
         return $reflection->getValue($object);
     }
