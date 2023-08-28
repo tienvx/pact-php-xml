@@ -21,6 +21,8 @@ jobs:
         uses: "ramsey/composer-install@v2"
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.COMPOSER_AUTH }}"}}'
+        with:
+          composer-options: "--no-scripts"
 
       - name: Run PHP CS Fixer
         run: php-cs-fixer fix --diff --dry-run
