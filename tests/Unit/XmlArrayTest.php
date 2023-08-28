@@ -27,6 +27,7 @@ class XmlArrayTest extends TestCase
     private function getProperty(object $object, string $property): mixed
     {
         $reflection = new ReflectionProperty($object, $property);
+        $reflection->setAccessible(true);
 
         return $reflection->getValue($object);
     }
