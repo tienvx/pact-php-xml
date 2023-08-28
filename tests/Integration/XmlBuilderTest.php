@@ -19,9 +19,9 @@ class XmlBuilderTest extends TestCase
         $this->matcher = new Matcher();
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
-        $this->xmlBuilder
+        $this->xmlBuilder // @phpstan-ignore-line
             ->start('ns1:projects', ['id' => '1234', 'xmlns:ns1' => 'http://some.namespace/and/more/stuff'])
                 ->eachLike('ns1:project', [
                     'id' => $this->matcher->integerV3(1),

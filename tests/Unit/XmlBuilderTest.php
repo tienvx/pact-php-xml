@@ -7,7 +7,7 @@ use Tienvx\PactPhpXml\XmlBuilder;
 
 class XMLBuilderTest extends TestCase
 {
-    public function testGetArray()
+    public function testGetArray(): void
     {
         $xmlBuilder = new XmlBuilder('1.0', 'UTF-8');
 
