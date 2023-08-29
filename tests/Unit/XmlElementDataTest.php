@@ -3,6 +3,8 @@
 namespace Tienvx\PactPhpXml\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Tienvx\PactPhpXml\Model\Matcher;
+use Tienvx\PactPhpXml\Model\Options;
 use Tienvx\PactPhpXml\XmlElementData;
 
 class XmlElementDataTest extends TestCase
@@ -11,8 +13,8 @@ class XmlElementDataTest extends TestCase
     {
         /** @var XmlElementData */
         $element = XmlElementData::create('Child', 'test', ['myAttr' => 'attr-value']);
-        $element->setMatching(true);
-        $element->setOptions(['elements' => 7]);
+        $element->setMatcher(new Matcher());
+        $element->setOptions(new Options(examples: 7));
 
         $this->assertSame(<<<JSON
         {
@@ -24,7 +26,7 @@ class XmlElementDataTest extends TestCase
                     "myAttr": "attr-value"
                 }
             },
-            "examples": 1
+            "examples": 7
         }
         JSON, json_encode($element->getArray(), JSON_PRETTY_PRINT));
     }

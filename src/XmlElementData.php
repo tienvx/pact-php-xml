@@ -4,26 +4,24 @@ namespace Tienvx\PactPhpXml;
 
 use AaronDDM\XMLBuilder\XMLElementData as BaseXmlElementData;
 use Tienvx\PactPhpXml\Exception\XmlElementTypeNotSupportedException;
+use Tienvx\PactPhpXml\Model\Matcher;
+use Tienvx\PactPhpXml\Model\Options;
 
 class XmlElementData extends BaseXmlElementData
 {
-    private bool $matching = false;
-    /**
-     * @var array<string, mixed> $options
-     */
-    private array $options = ['examples' => 1];
+    private ?Matcher $matcher = null;
+
+    private Options $options;
 
     /**
      * @return array<string, mixed>
      */
     public function getArray(): array
     {
-        if ($this->matching) {
-            return [
-                'pact:matcher:type' => 'type',
+        if ($this->matcher) {
+            return $this->matcher->getArray() + [
                 'value' => $this->getCustomArray(),
-                'examples' => $this->options['examples'] ?? 1,
-            ];
+            ] + $this->options->getArray();
         }
 
         return $this->getCustomArray();
@@ -45,17 +43,14 @@ class XmlElementData extends BaseXmlElementData
         ];
     }
 
-    public function setMatching(bool $matching): XmlElementData
+    public function setMatcher(?Matcher $matcher): XmlElementData
     {
-        $this->matching = $matching;
+        $this->matcher = $matcher;
 
         return $this;
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
-    public function setOptions(array $options): XmlElementData
+    public function setOptions(Options $options): XmlElementData
     {
         $this->options = $options;
 
