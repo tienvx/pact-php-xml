@@ -17,6 +17,7 @@ require_once 'vendor/autoload.php';
 
 use AaronDDM\XMLBuilder\Exception\XMLBuilderException;
 use PhpPact\Consumer\Matcher;
+use Tienvx\PactPhpXml\Model\Options;
 use Tienvx\PactPhpXml\XmlBuilder;
 
 $xmlBuilder = new XmlBuilder();
@@ -30,13 +31,13 @@ try {
                 'type' => 'activity',
                 'name' => $matcher->string('Project 1'),
                 'due' => $matcher->datetime("yyyy-MM-dd'T'HH:mm:ss.SZ", '2016-02-11T09:46:56.023Z')
-            ], ['examples' => 2])
+            ], new Options(examples: 2))
                 ->start('ns1:tasks')
                     ->eachLike('ns1:task', [
                         'id' => $this->matcher->integerV3(1),
                         'name' => $this->matcher->string('Task 1'),
                         'done' => $this->matcher->boolean()
-                    ], ['examples' => 5])
+                    ], new Options(examples: 5))
                     ->end()
                 ->end()
             ->end()
