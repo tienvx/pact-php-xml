@@ -2,25 +2,20 @@
 
 namespace Tienvx\PactPhpXml;
 
+use Tienvx\PactPhpXml\Model\Builder\ElementTrait;
+use Tienvx\PactPhpXml\Model\Builder\GeneratorTrait;
+use Tienvx\PactPhpXml\Model\Builder\MatcherTrait;
+use Tienvx\PactPhpXml\Model\Builder\TextTrait;
+
 class XmlBuilder
 {
-    private XmlArray $xmlArray;
+    use ElementTrait;
+    use TextTrait;
+    use MatcherTrait;
+    use GeneratorTrait;
 
-    public function __construct(
-        private string $version,
-        private string $charset,
-        ?XmlArray $xmlArray = null
-    ) {
-        $this->xmlArray = $xmlArray ?? XmlArray::initiate(XmlElementData::class); // @phpstan-ignore-line
-    }
-
-    /**
-     * @param array<string, string> $attributes
-     */
-    public function start(string $rootName, array $attributes = []): XmlArray
+    public function __construct(private string $version, private string $charset)
     {
-        /** @var XmlArray */
-        return $this->xmlArray->start($rootName, $attributes);
     }
 
     /**
@@ -31,7 +26,7 @@ class XmlBuilder
         return [
             'version' => $this->version,
             'charset' => $this->charset,
-            'root' => $this->xmlArray->getArray(),
+            'root' => $this->root->getArray(),
         ];
     }
 }

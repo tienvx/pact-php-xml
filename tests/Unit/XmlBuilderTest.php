@@ -9,20 +9,41 @@ class XMLBuilderTest extends TestCase
 {
     public function testGetArray(): void
     {
-        $xmlBuilder = new XmlBuilder('1.0', 'UTF-8');
+        $builder = new XmlBuilder('1.0', 'UTF-8');
 
-        $xmlBuilder
-            ->start('Root')
-                ->add('First Child Second Element', 'False')
-                ->start('Second Parent')
-                    ->add('Second child 1', null, ['myAttr' => 'Attr Value'])
-                    ->add('Second child 2', 'False')
-                    ->start('Third Parent')
-                        ->add('Child')
-                    ->end()
-                ->end()
-                ->add('First Child Third Element')
-            ->end()
+        $builder
+            ->root(
+                $builder->name('Root'),
+                $builder->add(
+                    $builder->name('First Child Second Element'),
+                    $builder->text(
+                        $builder->contentLike('Example Test')
+                    )
+                ),
+                $builder->add(
+                    $builder->name('Second Parent'),
+                    $builder->add(
+                        $builder->name('Second child 1'),
+                        $builder->attribute('myAttr', 'Attr Value')
+                    ),
+                    $builder->add(
+                        $builder->name('Second child 2'),
+                        $builder->text(
+                            $builder->content('Test')
+                        )
+                    ),
+                    $builder->add(
+                        $builder->name('Third Parent'),
+                        $builder->add(
+                            $builder->eachLike(),
+                            $builder->name('Child')
+                        )
+                    ),
+                ),
+                $builder->add(
+                    $builder->name('First Child Third Element'),
+                ),
+            )
         ;
 
         $expectedJson = <<<JSON
@@ -34,7 +55,14 @@ class XMLBuilderTest extends TestCase
                 "children": [
                     {
                         "name": "FirstChildSecondElement",
-                        "children": "False",
+                        "children": [
+                            {
+                                "content": "Example Test",
+                                "matcher": {
+                                    "pact:matcher:type": "type"
+                                }
+                            }
+                        ],
                         "attributes": {}
                     },
                     {
@@ -42,23 +70,32 @@ class XMLBuilderTest extends TestCase
                         "children": [
                             {
                                 "name": "Secondchild1",
-                                "children": null,
+                                "children": [],
                                 "attributes": {
                                     "myAttr": "Attr Value"
                                 }
                             },
                             {
                                 "name": "Secondchild2",
-                                "children": "False",
+                                "children": [
+                                    {
+                                        "content": "Test"
+                                    }
+                                ],
                                 "attributes": {}
                             },
                             {
                                 "name": "ThirdParent",
                                 "children": [
                                     {
-                                        "name": "Child",
-                                        "children": null,
-                                        "attributes": {}
+                                        "value": {
+                                            "name": "Child",
+                                            "children": [],
+                                            "attributes": {}
+                                        },
+                                        "pact:matcher:type": "type",
+                                        "min": 1,
+                                        "examples": 1
                                     }
                                 ],
                                 "attributes": {}
@@ -68,7 +105,7 @@ class XMLBuilderTest extends TestCase
                     },
                     {
                         "name": "FirstChildThirdElement",
-                        "children": null,
+                        "children": [],
                         "attributes": {}
                     }
                 ],
@@ -77,6 +114,6 @@ class XMLBuilderTest extends TestCase
         }
         JSON;
 
-        $this->assertEquals($expectedJson, json_encode($xmlBuilder->getArray(), JSON_PRETTY_PRINT));
+        $this->assertEquals($expectedJson, json_encode($builder->getArray(), JSON_PRETTY_PRINT));
     }
 }
