@@ -55,8 +55,6 @@ try {
 }
 ```
 
-TBD
-
 ## License
 
 [MIT](https://github.com/tienvx/pact-php-xml/blob/main/LICENSE)
