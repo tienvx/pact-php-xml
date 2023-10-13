@@ -20,30 +20,36 @@ use PhpPact\Consumer\Matcher;
 use Tienvx\PactPhpXml\Model\Options;
 use Tienvx\PactPhpXml\XmlBuilder;
 
-$xmlBuilder = new XmlBuilder();
+$builder = new XmlBuilder();
 $matcher = new Matcher();
 
 try {
-    $xmlBuilder
-        ->start('ns1:projects', ['id' => '1234', 'xmlns:ns1' => 'http://some.namespace/and/more/stuff'])
-            ->eachLike('ns1:project', [
-                'id' => $matcher->integerV3(1),
-                'type' => 'activity',
-                'name' => $matcher->string('Project 1'),
-                'due' => $matcher->datetime("yyyy-MM-dd'T'HH:mm:ss.SZ", '2016-02-11T09:46:56.023Z')
-            ], new Options(examples: 2))
-                ->start('ns1:tasks')
-                    ->eachLike('ns1:task', [
-                        'id' => $this->matcher->integerV3(1),
-                        'name' => $this->matcher->string('Task 1'),
-                        'done' => $this->matcher->boolean()
-                    ], new Options(examples: 5))
-                    ->end()
-                ->end()
-            ->end()
-        ->end();
+    $builder
+        ->root(
+            $builder->name('ns1:projects'),
+            $builder->attribute('id', '1234'),
+            $builder->attribute('xmlns:ns1', 'http://some.namespace/and/more/stuff'),
+            $builder->add(
+                $builder->eachLike(examples: 2),
+                $builder->name('ns1:project'),
+                $builder->attribute('id', $matcher->integerV3(1)),
+                $builder->attribute('type', 'activity'),
+                $builder->attribute('name', $matcher->string('Project 1')),
+                $builder->attribute('due', $matcher->datetime("yyyy-MM-dd'T'HH:mm:ss.SZ", '2016-02-11T09:46:56.023Z')),
+                $builder->add(
+                    $builder->name('ns1:tasks'),
+                    $builder->add(
+                        $builder->eachLike(examples: 5),
+                        $builder->name('ns1:task'),
+                        $builder->attribute('id', $matcher->integerV3(1)),
+                        $builder->attribute('name', $matcher->string('Task 1')),
+                        $builder->attribute('done', $matcher->boolean()),
+                    ),
+                ),
+            ),
+        );
 
-    var_dump($xmlBuilder->getArray());
+    var_dump($builder->getArray());
 } catch (XMLBuilderException $e) {
     var_dump('An exception occurred: ' . $e->getMessage());
 }
